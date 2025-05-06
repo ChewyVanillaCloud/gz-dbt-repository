@@ -1,0 +1,23 @@
+# schema.yml
+
+version: 2
+
+# Defining sources
+
+sources:
+  - name: raw # dbt alias to reference source('raw', 'sales') etc.
+    schema: gz_raw_data # my BigQuery dataset name
+    description: Raw data from BigQuery
+
+    tables:
+      - name: sales
+        identifier: raw_gz_sales
+        description: Contains sales transactions
+
+      - name: product
+        identifier: raw_gz_product
+        description: Contains product details
+
+      - name: ship
+        identifier: raw_gz_ship
+        description: Contains shipping info
