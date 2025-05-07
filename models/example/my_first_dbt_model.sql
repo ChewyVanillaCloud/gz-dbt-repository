@@ -1,27 +1,31 @@
-
 /*
     Welcome to your first dbt model!
-    Did you know that you can also configure models directly within SQL files?
-    This will override configurations stated in dbt_project.yml
-
-    Try changing "table" to "view" below
+    This model generates a simple dataset with an intentional NULL value
+    to demonstrate testing and filtering concepts in dbt.
+    
+    By default, this materializes as a table, but you can switch it to a view if needed.
 */
 
 {{ config(materialized='table') }}
 
+-- Create a CTE (Common Table Expression) to simulate source data
 with source_data as (
 
     select 1 as id
     union all
     select null as id
 
+),
+
+-- Filter out rows where id is null, so that the 'not_null' test passes
+cleaned_data as (
+
+    select *
+    from source_data
+    where id is not null
+
 )
 
+-- Final SELECT outputs only rows with non-null IDs
 select *
-from source_data
-
-/*
-    Uncomment the line below to remove records with null `id` values
-*/
-
--- where id is not null
+from cleaned_data

@@ -5,7 +5,7 @@ with source as (
 renamed as (
     select
         
-        order_id,
+        orders_id,
         shipping_fee,
         CAST(ship_cost AS FLOAT64) AS ship_cost
     from source
