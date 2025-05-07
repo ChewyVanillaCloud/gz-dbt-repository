@@ -7,7 +7,7 @@ renamed AS (
     SELECT
         orders_id,
         shipping_fee,
-        CAST(log_cost AS FLOAT64) AS log_cost,     -- ✅ Add this line
+        CAST(logCost AS FLOAT64) AS log_cost,         -- ✅ correct casing from BigQuery
         CAST(ship_cost AS FLOAT64) AS ship_cost
     FROM source
     WHERE shipping_fee = shipping_fee_1  -- keep only rows where they match (optional)
