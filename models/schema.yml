@@ -9,6 +9,11 @@ sources:
       - name: sales
         identifier: raw_gz_sales
         description: Sales of Greenweez — one row per product_id found in each orders_id
+        # Freshness testing
+        loaded_at_field: "CAST(date_date AS TIMESTAMP)"
+        freshness:
+          warn_after: {count: 90, period: day}
+
         columns:
           - name: date_date
             description: Date of purchase
@@ -23,7 +28,6 @@ sources:
         tests:
           - unique:
               column_name: "(orders_id || '-' || pdt_id)"
-          # If dbt_utils is installed, prefer this:
           - dbt_utils.unique_combination_of_columns:
               combination_of_columns:
                 - orders_id
