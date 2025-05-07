@@ -2,22 +2,51 @@
 
 version: 2
 
-# Defining sources
-
 sources:
-  - name: raw # dbt alias to reference source('raw', 'sales') etc.
-    schema: gz_raw_data # my BigQuery dataset name
-    description: Raw data from BigQuery
-
+  - name: raw
+    schema: gz_raw_data
     tables:
       - name: sales
         identifier: raw_gz_sales
-        description: Contains sales transactions
+        description: Sales of Greenweez — one row per product_id found in each orders_id
+        columns:
+          - name: date_date
+            description: Date of purchase
+          - name: orders_id
+            description: Foreign key to ship
+          - name: pdt_id
+            description: Foreign key to product
+          - name: revenue
+            description: The amount paid by the customer to purchase the product (revenue = quantity * selling_price)
+          - name: quanitity
+            description: The quantity of products purchased for a given order
+        tests:
+          - unique:
+              column_name: "(orders_id || '-' || pdt_id)"
+          # If dbt_utils is installed, prefer this:
+          - dbt_utils.unique_combination_of_columns:
+              combination_of_columns:
+                - orders_id
+                - pdt_id
 
       - name: product
         identifier: raw_gz_product
-        description: Contains product details
+        description: Products of Greenweez
+        columns:
+          - name: products_id
+            description: Primary key
+            tests:
+              - unique
+              - not_null
+          - name: purchase_price
+            description: The purchase price of the product
 
       - name: ship
         identifier: raw_gz_ship
-        description: Contains shipping info
+        description: Shipping data for Greenweez orders
+        columns:
+          - name: orders_id
+            description: Primary key
+            tests:
+              - unique
+              - not_null
